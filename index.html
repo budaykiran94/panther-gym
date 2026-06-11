@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#13111a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Panther Gym">
+<title>Panther Gym Plan</title>
+<link rel="manifest" id="manifest-link">
+<script>
+// Inline manifest — no separate file needed
+const manifestData = {
+  "name": "Panther Gym Plan",
+  "short_name": "Panther Gym",
+  "description": "Uday + Manisha workout and diet plan",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#13111a",
+  "theme_color": "#13111a",
+  "icons": [
+    {
+      "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAABmJLR0QA/wD/AP+gvaeTAAADf0lEQVR4nO3BMQEAAADCoPVP7WsIoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAeAMBuAABHgAAAABJRU5ErkJggg==",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+};
+const blob = new Blob([JSON.stringify(manifestData)], {type: 'application/manifest+json'});
+const manifestURL = URL.createObjectURL(blob);
+document.getElementById('manifest-link').setAttribute('href', manifestURL);
+</script>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #13111a; color: #eeeaf6; overscroll-behavior: none; }
+:root {
+  --bg: #13111a;
+  --surface: #1e1b28;
+  --card: #252235;
+  --border: #332f45;
+  --accent: #ff9f43;
+  --green: #26de81;
+  --blue: #45aaf2;
+  --purple: #a55eea;
+  --pink: #fd79a8;
+  --red: #ff6b6b;
+  --teal: #00cec9;
+  --text: #eeeaf6;
+  --muted: #9b96b0;
+}
+/* HEADER */
+.header { background: linear-gradient(135deg, #1e1b28 0%, #252235 100%); border-bottom: 1px solid var(--border); padding: 16px 16px 12px; position: sticky; top: 0; z-index: 100; }
+.header-row { display: flex; align-items: center; gap: 8px; margin-bottom: 3px; }
+.header h1 { font-size: 17px; font-weight: 800; letter-spacing: -0.5px; }
+.badge-green { background: #26de8122; color: var(--green); font-size: 10px; padding: 2px 8px; border-radius: 20px; font-weight: 700; }
+.header p { color: var(--muted); font-size: 11px; }
+/* TABS */
+.tabs { display: flex; overflow-x: auto; background: #1a1726; border-bottom: 1px solid var(--border); position: sticky; top: 57px; z-index: 99; scrollbar-width: none; }
+.tabs::-webkit-scrollbar { display: none; }
+.tab-btn { background: none; border: none; border-bottom: 2px solid transparent; color: var(--muted); padding: 11px 13px; cursor: pointer; font-size: 11px; font-weight: 600; white-space: nowrap; font-family: inherit; }
+.tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); text-shadow: 0 0 20px #ff9f4366; }
+/* CONTENT */
+.content { padding: 14px; max-width: 720px; margin: 0 auto; padding-bottom: 40px; }
+/* CARDS */
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px; margin-bottom: 10px; } .card:not(.card-green):not(.card-blue):not(.card-accent):not(.card-purple):not(.card-red) { box-shadow: 0 2px 12px #0008; }
+.card-green { background: #0d1f16; border-color: #26de8155; }
+.card-blue { background: #0d1624; border-color: #45aaf255; }
+.card-accent { background: #1f1608; border-color: #ff9f4355; }
+.card-purple { background: #160d26; border-color: #a55eea55; }
+.card-red { background: #1f0d0d; border-color: #ff6b6b55; }
+/* GRID */
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.grid4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; }
+/* META CHIPS */
+.meta-chip { background: var(--surface); border-radius: 8px; padding: 10px 8px; text-align: center; }
+.meta-chip .val { font-size: 14px; font-weight: 800; }
+.meta-chip .lbl { font-size: 10px; color: var(--muted); margin-top: 3px; text-transform: uppercase; letter-spacing: 0.7px; }
+/* SECTION LABEL */
+.sec-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); margin-bottom: 10px; }
+/* PERSON CARD */
+.person-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px; }
+.person-name { font-weight: 800; font-size: 15px; margin-bottom: 2px; }
+.person-stats { color: var(--muted); font-size: 11px; margin-bottom: 2px; }
+.person-bmi { font-size: 11px; margin-bottom: 6px; }
+.person-goal { font-size: 12px; margin-bottom: 10px; line-height: 1.5; }
+/* MACRO CHIPS ROW */
+.macro-row { display: flex; gap: 6px; flex-wrap: wrap; }
+.macro-chip { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 9px 8px; text-align: center; flex: 1; min-width: 58px; }
+.macro-chip .mv { font-size: 14px; font-weight: 800; }
+.macro-chip .ml { font-size: 10px; color: var(--muted); margin-top: 3px; text-transform: uppercase; letter-spacing: 0.7px; }
+/* SCHEDULE ROW */
+.sched-row { display: flex; gap: 10px; margin-bottom: 8px; }
+.sched-day { min-width: 82px; }
+.sched-day-name { color: var(--accent); font-weight: 700; font-size: 11px; }
+.sched-theme { color: var(--muted); font-size: 10px; }
+.sched-u { font-size: 11px; color: var(--text); }
+.sched-m { font-size: 11px; color: var(--blue); margin-top: 1px; }
+/* WORKOUT DAY */
+.workout-day { background: var(--card); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 8px; }
+.workout-day.today { border-color: var(--accent); box-shadow: 0 0 0 1px #ff9f4333, 0 4px 20px #ff9f4322; }
+.workout-day-header { display: flex; align-items: center; padding: 12px 16px; cursor: pointer; user-select: none; justify-content: space-between; }
+.workout-day-header:active { background: #2e2a3f; }
+.workout-day-left { display: flex; gap: 10px; align-items: center; }
+.workout-day-name { color: var(--accent); font-weight: 700; font-size: 11px; min-width: 82px; }
+.workout-day-label { color: var(--text); font-size: 13px; font-weight: 600; }
+.today-badge { background: linear-gradient(135deg, #ff9f43, #ff6b6b); color: #000; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 20px; margin-left: 6px; }
+.workout-day-body { display: none; border-top: 1px solid var(--border); }
+.workout-day-body.open { display: block; }
+.ex-header { display: grid; grid-template-columns: 1fr 40px 100px; padding: 5px 16px; border-bottom: 1px solid var(--border); }
+.ex-header span { color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: 0.8px; }
+.ex-row { display: grid; grid-template-columns: 1fr 40px 100px; padding: 9px 16px; border-bottom: 1px solid var(--border); align-items: start; }
+.ex-row:last-child { border-bottom: none; }
+.ex-name { color: var(--text); font-size: 13px; font-weight: 500; }
+.ex-note { color: var(--muted); font-size: 11px; margin-top: 2px; font-style: italic; }
+.ex-sets { color: var(--accent); font-size: 13px; font-weight: 700; text-align: center; }
+.ex-reps { color: var(--green); font-size: 12px; }
+/* DIET TABLE */
+.diet-toggle { display: flex; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 3px; margin-bottom: 10px; }
+.diet-toggle button { flex: 1; background: none; border: 1px solid transparent; border-radius: 8px; padding: 8px 4px; cursor: pointer; font-size: 11px; font-weight: 700; color: var(--muted); font-family: inherit; }
+.diet-toggle button.active { background: var(--card); }
+.diet-table-wrap { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 0; }
+.diet-table-header { display: grid; grid-template-columns: 78px 1fr 40px 40px 40px 56px; padding: 7px 10px; background: linear-gradient(135deg,#1a1726,#1e1b28); border-bottom: 1px solid var(--border); }
+.diet-table-header span { color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: 0.7px; text-align: center; }
+.diet-table-header span:first-child, .diet-table-header span:nth-child(2) { text-align: left; }
+.diet-row { border-bottom: 1px solid var(--border); cursor: pointer; }
+.diet-row:last-child { border-bottom: none; }
+.diet-row-top { display: grid; grid-template-columns: 78px 1fr 40px 40px 40px 56px; padding: 9px 10px; align-items: center; }
+.diet-row-top:active { background: #2a2a2a; }
+.diet-time { color: var(--muted); font-size: 11px; }
+.diet-meal-name { color: var(--text); font-size: 12px; font-weight: 600; }
+.diet-meal-preview { color: var(--muted); font-size: 10px; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 130px; }
+.diet-p { color: var(--green); font-size: 12px; font-weight: 700; text-align: center; }
+.diet-c { color: var(--blue); font-size: 12px; font-weight: 700; text-align: center; }
+.diet-f { color: var(--red); font-size: 12px; font-weight: 700; text-align: center; }
+.diet-k { font-size: 12px; font-weight: 700; text-align: center; }
+.diet-row-body { display: none; padding: 0 10px 10px; background: #1e1b28; }
+.diet-row-body.open { display: block; }
+.diet-food { color: var(--text); font-size: 12px; line-height: 1.7; margin-bottom: 7px; padding-top: 8px; }
+.diet-subs { background: var(--surface); border-radius: 6px; padding: 7px 10px; margin-bottom: 5px; font-size: 11px; }
+.diet-subs-label { color: var(--muted); font-weight: 600; }
+.diet-note-text { color: var(--green); font-size: 11px; font-style: italic; }
+.diet-totals { display: grid; grid-template-columns: 78px 1fr 40px 40px 40px 56px; padding: 9px 10px; background: linear-gradient(135deg,#1e1b28,#252235); }
+.diet-totals-label { color: var(--muted); font-size: 11px; font-weight: 700; grid-column: 1/3; }
+/* RULES */
+.rule-row { display: flex; gap: 8px; padding: 5px 0; border-bottom: 1px solid var(--border); }
+.rule-row:last-child { border-bottom: none; }
+.rule-num { color: var(--accent); font-weight: 700; font-size: 11px; min-width: 16px; }
+.rule-text { color: var(--text); font-size: 11px; line-height: 1.55; }
+/* PROGRESSION */
+.phase-card { border-radius: 12px; padding: 14px; margin-bottom: 10px; }
+.phase-header { display: flex; gap: 8px; align-items: center; margin-bottom: 10px; }
+.phase-badge { font-size: 10px; font-weight: 800; padding: 3px 10px; border-radius: 20px; }
+.phase-weeks { color: var(--muted); font-size: 11px; }
+.phase-label { font-weight: 700; font-size: 12px; }
+.phase-focus { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border); }
+.focus-chip { font-size: 10px; padding: 2px 8px; border-radius: 20px; }
+/* TRACKING */
+.track-table { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; box-shadow: 0 2px 12px #0008; }
+.track-header { display: grid; grid-template-columns: 48px 1fr 1fr 1fr 56px; padding: 7px 10px; background: linear-gradient(135deg,#1a1726,#1e1b28); border-bottom: 1px solid var(--border); }
+.track-header span { color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: 0.7px; text-align: center; }
+.track-header span:first-child { text-align: left; }
+.track-row { display: grid; grid-template-columns: 48px 1fr 1fr 1fr 56px; padding: 5px 10px; border-bottom: 1px solid var(--border); align-items: center; }
+.track-row:last-child { border-bottom: none; }
+.track-wk { color: var(--accent); font-weight: 700; font-size: 12px; }
+.track-input { background: none; border: none; border-bottom: 1px solid var(--border); color: var(--text); font-size: 12px; text-align: center; padding: 2px 2px; outline: none; width: 100%; font-family: inherit; }
+/* WELLNESS */
+.well-item { padding: 9px 0; border-bottom: 1px solid var(--border); }
+.well-item:last-child { border-bottom: none; }
+.well-item-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 3px; }
+.well-item-name { color: var(--text); font-size: 13px; font-weight: 600; }
+.well-item-tags { display: flex; gap: 4px; flex-shrink: 0; margin-left: 8px; }
+.well-tag { font-size: 10px; padding: 1px 6px; border-radius: 20px; }
+.well-item-note { color: var(--muted); font-size: 11px; line-height: 1.55; }
+/* PRIORITY STACK */
+.stack-item { display: flex; gap: 6px; margin-bottom: 5px; align-items: flex-start; }
+.stack-num { font-size: 11px; margin-top: 1px; }
+.stack-text { color: var(--text); font-size: 11px; line-height: 1.4; }
+/* TIPS */
+.tip-card { background: var(--card); border-radius: 12px; padding: 14px; margin-bottom: 10px; display: flex; gap: 10px; align-items: flex-start; }
+.tip-icon { font-size: 18px; flex-shrink: 0; }
+.tip-title { font-weight: 700; font-size: 13px; margin-bottom: 4px; }
+.tip-body { font-size: 12px; color: var(--text); line-height: 1.65; }
+/* POSTPARTUM CIRCUIT */
+.circuit-row { display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid var(--border); }
+.circuit-row:last-child { border-bottom: none; }
+.circuit-name { color: var(--text); font-size: 12px; font-weight: 600; }
+.circuit-reps { color: var(--purple); font-size: 11px; font-weight: 700; margin-left: 8px; white-space: nowrap; }
+.circuit-note { color: var(--muted); font-size: 11px; font-style: italic; margin-top: 2px; }
+/* SHOPPING */
+.shop-row { display: flex; justify-content: space-between; gap: 8px; padding: 6px 0; border-bottom: 1px solid var(--border); }
+.shop-row:last-child { border-bottom: none; }
+.shop-brand { color: var(--accent); font-weight: 700; font-size: 11px; }
+.shop-items { color: var(--text); font-size: 11px; }
+.shop-where { color: var(--muted); font-size: 10px; flex-shrink: 0; }
+/* INSTALL BANNER */
+#install-banner { display: none; background: #0a1a0a; border: 1px solid #4caf7d44; border-radius: 10px; padding: 12px 14px; margin-bottom: 12px; }
+#install-banner p { color: var(--text); font-size: 12px; line-height: 1.6; }
+#install-btn { margin-top: 8px; background: var(--green); color: #000; border: none; border-radius: 8px; padding: 8px 16px; font-size: 12px; font-weight: 700; cursor: pointer; font-family: inherit; }
+</style>
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    // Inline service worker
+    const swCode = `
+self.addEventListener('install', e => {
+  e.waitUntil(
+    caches.open('panther-gym-v1').then(cache => cache.addAll(['./', './index.html']))
+  );
+});
+self.addEventListener('fetch', e => {
+  e.respondWith(
+    caches.match(e.request).then(r => r || fetch(e.request))
+  );
+});`;
+    const swBlob = new Blob([swCode], {type: 'application/javascript'});
+    const swURL = URL.createObjectURL(swBlob);
+    navigator.serviceWorker.register(swURL).catch(() => {});
+  });
+}
+</script>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-row">
+    <span style="font-size:20px">🏋️</span>
+    <h1 style="background:linear-gradient(135deg,#ff9f43,#fd79a8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Panther Gym Plan</h1>
+    <span class="badge-green">START MONDAY</span>
+  </div>
+  <p>Uday (Recomp) + Manisha (Fat Loss) · 6 AM · Synced Split</p>
+</div>
+
+<div class="tabs" id="tabs">
+  <button class="tab-btn active" onclick="showTab('overview',this)">Overview</button>
+  <button class="tab-btn" onclick="showTab('uday',this)">Uday</button>
+  <button class="tab-btn" onclick="showTab('manisha',this)">Manisha</button>
+  <button class="tab-btn" onclick="showTab('diet',this)">Diet</button>
+  <button class="tab-btn" onclick="showTab('progression',this)">Progression</button>
+  <button class="tab-btn" onclick="showTab('tracking',this)">Tracking</button>
+  <button class="tab-btn" onclick="showTab('wellness',this)">Wellness</button>
+  <button class="tab-btn" onclick="showTab('tips',this)">Tips</button>
+</div>
+
+<div class="content">
+  <div id="install-banner">
+    <p>📲 <strong>Add to Home Screen</strong> — tap the menu in your browser and select "Add to Home Screen" for instant access like a native app.</p>
+    <button id="install-btn">Install App</button>
+  </div>
+
+  <!-- OVERVIEW -->
+  <div id="tab-overview">
+    <div class="card card-green" style="margin-bottom:10px;background:linear-gradient(135deg,#0d1f16,#0f2a1a);">
+      <p style="font-weight:800;font-size:14px;color:var(--green);margin-bottom:4px">🎯 2 Month Window — No Twins</p>
+      <p style="font-size:12px;line-height:1.65">Better sleep, full focus, uninterrupted 6 AM sessions. Be consistent and you'll both look noticeably different when they return.</p>
+    </div>
+    <div class="grid2" style="margin-bottom:6px">
+      <div class="person-card" style="background:linear-gradient(145deg,#252235,#1e1b28);">
+        <div class="person-name">Uday</div>
+        <div class="person-stats">32 · 75kg · 6ft · BMI 22.4</div>
+        <div class="person-bmi" style="color:var(--accent)">Body Recomposition</div>
+        <div class="person-goal">Lose fat + gain muscle simultaneously</div>
+        <span style="background:#ff9f4322;color:var(--accent);font-size:10px;padding:3px 8px;border-radius:20px;font-weight:700">~2150 kcal</span>
+      </div>
+      <div class="person-card" style="background:linear-gradient(145deg,#252235,#1e1b28);">
+        <div class="person-name">Manisha</div>
+        <div class="person-stats">32 · 70kg · 5'5" · BMI 25.7*</div>
+        <div class="person-bmi" style="color:var(--blue)">Fat Loss + Rebuild</div>
+        <div class="person-goal">OB cleared · 3 mo post C-section</div>
+        <span style="background:#45aaf222;color:var(--blue);font-size:10px;padding:3px 8px;border-radius:20px;font-weight:700">1700 kcal</span>
+      </div>
+    </div>
+    <p style="color:var(--muted);font-size:10px;font-style:italic;margin-bottom:10px">*Postpartum water retention inflates BMI by ~2 points at 3 months.</p>
+    <div class="card">
+      <p style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:12px">📅 Weekly Schedule — Both 6 AM</p>
+      <div id="schedule-rows"></div>
+    </div>
+  </div>
+
+  <!-- UDAY WORKOUT -->
+  <div id="tab-uday" style="display:none">
+    <div class="card" style="margin-bottom:10px">
+      <div style="font-weight:700;font-size:14px;color:var(--accent);margin-bottom:2px">Uday — Body Recomposition</div>
+      <div style="color:var(--muted);font-size:11px;margin-bottom:10px">Lose fat + gain muscle · Each muscle 2×/week · 6 AM</div>
+      <div class="macro-row">
+        <div class="macro-chip"><div class="mv" style="color:var(--accent)">~2150</div><div class="ml">kcal</div></div>
+        <div class="macro-chip"><div class="mv" style="color:var(--green)">165g</div><div class="ml">protein</div></div>
+        <div class="macro-chip"><div class="mv" style="color:var(--blue)">271g</div><div class="ml">carbs</div></div>
+        <div class="macro-chip"><div class="mv" style="color:var(--red)">59g</div><div class="ml">fat</div></div>
+      </div>
+    </div>
+    <div id="uday-workout-days"></div>
+  </div>
+
+  <!-- MANISHA WORKOUT -->
+  <div id="tab-manisha" style="display:none">
+    <div class="card" style="margin-bottom:10px">
+      <div style="font-weight:700;font-size:14px;color:var(--blue);margin-bottom:2px">Manisha — Fat Loss + Strength</div>
+      <div style="color:var(--muted);font-size:11px;margin-bottom:10px">OB cleared · 6 AM · Jump rope Mon+Fri · 1700 kcal</div>
+      <div class="macro-row">
+        <div class="macro-chip"><div class="mv" style="color:var(--accent)">1700</div><div class="ml">kcal</div></div>
+        <div class="macro-chip"><div class="mv" style="color:var(--green)">123g</div><div class="ml">protein</div></div>
+        <div class="macro-chip"><div class="mv" style="color:var(--blue)">182g</div><div class="ml">carbs</div></div>
+        <div class="macro-chip"><div class="mv" style="color:var(--red)">50g</div><div class="ml">fat</div></div>
+      </div>
+    </div>
+    <div class="card card-red" style="margin-bottom:10px">
+      <p style="font-weight:700;font-size:12px;color:var(--red);margin-bottom:6px">🦘 Jump Rope — Stop if any occur:</p>
+      <div style="display:flex;gap:5px;flex-wrap:wrap">
+        <span style="background:#ff6b6b18;color:var(--red);font-size:11px;padding:2px 8px;border-radius:20px">⚠️ Leaking</span>
+        <span style="background:#ff6b6b18;color:var(--red);font-size:11px;padding:2px 8px;border-radius:20px">⚠️ Heaviness</span>
+        <span style="background:#ff6b6b18;color:var(--red);font-size:11px;padding:2px 8px;border-radius:20px">⚠️ Doming</span>
+        <span style="background:#ff6b6b18;color:var(--red);font-size:11px;padding:2px 8px;border-radius:20px">⚠️ Scar discomfort</span>
+      </div>
+    </div>
+    <div class="card card-purple" style="margin-bottom:10px">
+      <p style="font-weight:700;font-size:12px;color:var(--purple);margin-bottom:8px">⏱️ Daily 10-Min Morning Circuit</p>
+      <div id="postpartum-circuit"></div>
+    </div>
+    <div id="manisha-workout-days"></div>
+  </div>
+
+  <!-- DIET -->
+  <div id="tab-diet" style="display:none">
+    <div class="diet-toggle">
+      <button id="diet-uday-btn" class="active" onclick="switchDiet('uday')" style="color:var(--accent)">🏋️ Uday — 2150 kcal</button>
+      <button id="diet-manisha-btn" onclick="switchDiet('manisha')">💪 Manisha — 1700 kcal</button>
+    </div>
+    <div class="card" style="margin-bottom:10px;padding:8px 12px">
+      <p id="diet-info-text" style="font-size:11px;color:var(--muted)"></p>
+    </div>
+    <div class="diet-table-wrap">
+      <div class="diet-table-header">
+        <span>Time</span><span>Meal</span>
+        <span>P</span><span>C</span><span>F</span><span>kcal</span>
+      </div>
+      <div id="diet-rows"></div>
+      <div class="diet-totals" id="diet-totals"></div>
+    </div>
+    <div class="card card-accent" style="margin-top:0;border-radius:0 0 10px 10px;border-top:none;padding:10px 12px">
+      <span style="color:var(--accent);font-weight:700;font-size:11px">🙏 FRIDAY VEG: </span>
+      <span id="friday-text" style="color:var(--text);font-size:11px"></span>
+    </div>
+    <div class="card" style="margin-top:10px">
+      <p style="font-weight:700;font-size:12px;color:var(--accent);margin-bottom:10px">📋 Key Rules</p>
+      <div id="diet-rules"></div>
+    </div>
+    <div class="card" style="margin-top:10px">
+      <p style="font-weight:700;font-size:12px;color:var(--accent);margin-bottom:10px">🛒 Shopping</p>
+      <div class="shop-row"><div><span class="shop-brand">Nature's Own Whole Wheat </span><span class="shop-items">Breakfast toast</span></div><span class="shop-where">Walmart/H-E-B</span></div>
+      <div class="shop-row"><div><span class="shop-brand">iD Fresh Batter </span><span class="shop-items">Idli/dosa without grinding</span></div><span class="shop-where">Indian grocery</span></div>
+      <div class="shop-row"><div><span class="shop-brand">Deep Foods Frozen </span><span class="shop-items">Saag, dal, sabzi — 5 min sides</span></div><span class="shop-where">Indian grocery</span></div>
+      <div class="shop-row"><div><span class="shop-brand">Fage 0% Greek Yogurt </span><span class="shop-items">High protein — buy bulk</span></div><span class="shop-where">Costco/Walmart</span></div>
+      <div class="shop-row"><div><span class="shop-brand">ON Gold Standard Whey </span><span class="shop-items">Clean macros</span></div><span class="shop-where">Costco/Amazon</span></div>
+    </div>
+  </div>
+
+  <!-- PROGRESSION -->
+  <div id="tab-progression" style="display:none">
+    <div class="card" style="margin-bottom:10px">
+      <p style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:4px">📈 8-Week System</p>
+      <p style="font-size:11px;color:var(--muted)">One clean 8-week cycle. Hit it hard, track everything, come back looking different.</p>
+    </div>
+    <div id="progression-phases"></div>
+    <div class="card">
+      <p style="font-weight:700;font-size:12px;color:var(--accent);margin-bottom:10px">📊 Weekly Tracking</p>
+      <div style="padding:6px 0;border-bottom:1px solid var(--border)"><div style="color:var(--text);font-size:12px;font-weight:600">Body weight</div><div style="color:var(--muted);font-size:11px;margin-top:2px">Uday: daily. Manisha: Friday only. Track 7-day average.</div></div>
+      <div style="padding:6px 0;border-bottom:1px solid var(--border)"><div style="color:var(--text);font-size:12px;font-weight:600">Waist at navel</div><div style="color:var(--muted);font-size:11px;margin-top:2px">Every 2 weeks — more reliable than scale postpartum.</div></div>
+      <div style="padding:6px 0;border-bottom:1px solid var(--border)"><div style="color:var(--text);font-size:12px;font-weight:600">Main lift weights</div><div style="color:var(--muted);font-size:11px;margin-top:2px">Bench, squat, deadlift — note weight used each session.</div></div>
+      <div style="padding:6px 0"><div style="color:var(--text);font-size:12px;font-weight:600">Progress photos</div><div style="color:var(--muted);font-size:11px;margin-top:2px">Every 4 weeks. Same lighting, same pose. Front + side.</div></div>
+    </div>
+  </div>
+
+  <!-- TRACKING -->
+  <div id="tab-tracking" style="display:none">
+    <div class="card" style="margin-bottom:10px">
+      <p style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:4px">📊 8-Week Progress Log</p>
+      <p style="font-size:11px;color:var(--muted)">Uday: daily weigh-in. Manisha: Friday only. Waist every 2 weeks.</p>
+    </div>
+    <div class="track-table">
+      <div class="track-header">
+        <span style="text-align:left">Week</span>
+        <span>Uday kg</span><span>M kg</span><span>Waist</span><span>Sessions</span>
+      </div>
+      <div id="tracking-rows"></div>
+    </div>
+    <div class="card" style="margin-top:10px">
+      <p style="font-weight:700;font-size:12px;color:var(--accent);margin-bottom:8px">📸 Progress Photos</p>
+      <div style="display:flex;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)"><span style="color:var(--accent)">📷</span><span style="color:var(--text);font-size:12px">Week 1 — Baseline (take today)</span></div>
+      <div style="display:flex;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)"><span style="color:var(--accent)">📷</span><span style="color:var(--text);font-size:12px">Week 4 — Mid-check</span></div>
+      <div style="display:flex;gap:8px;padding:6px 0"><span style="color:var(--accent)">📷</span><span style="color:var(--text);font-size:12px">Week 8 — Final comparison</span></div>
+      <p style="font-size:11px;color:var(--muted);font-style:italic;margin-top:8px">Same lighting, same time, same pose. Front + side. Both.</p>
+    </div>
+  </div>
+
+  <!-- WELLNESS -->
+  <div id="tab-wellness" style="display:none">
+    <div class="card card-purple" style="margin-bottom:10px">
+      <p style="font-weight:800;font-size:14px;color:var(--purple);margin-bottom:4px">✨ Overall Transformation</p>
+      <p style="font-size:12px;line-height:1.65">Skin, hair, and hormonal health alongside your training. Evidence-backed — not marketing.</p>
+    </div>
+    <div id="wellness-content"></div>
+  </div>
+
+  <!-- TIPS -->
+  <div id="tab-tips" style="display:none">
+    <div id="tips-content"></div>
+    <div class="card" style="border-color:#4caf7d44">
+      <p style="font-weight:700;font-size:12px;color:var(--green);margin-bottom:8px">📱 Apps</p>
+      <div style="padding:5px 0;border-bottom:1px solid var(--border)"><span style="color:var(--green);font-weight:700;font-size:12px">Strong </span><span style="color:var(--muted);font-size:11px">— Log lifts, tracks progressive overload</span></div>
+      <div style="padding:5px 0;border-bottom:1px solid var(--border)"><span style="color:var(--green);font-weight:700;font-size:12px">Concept2 ErgData </span><span style="color:var(--muted);font-size:11px">— Bluetooth rower tracking</span></div>
+      <div style="padding:5px 0;border-bottom:1px solid var(--border)"><span style="color:var(--green);font-weight:700;font-size:12px">Cronometer </span><span style="color:var(--muted);font-size:11px">— Best macro tracker for Indian foods</span></div>
+      <div style="padding:5px 0;border-bottom:1px solid var(--border)"><span style="color:var(--green);font-weight:700;font-size:12px">Nike Run Club </span><span style="color:var(--muted);font-size:11px">— Free GPS for outdoor runs</span></div>
+      <div style="padding:5px 0"><span style="color:var(--green);font-weight:700;font-size:12px">Physitrack </span><span style="color:var(--muted);font-size:11px">— Postpartum TVA exercises (Manisha)</span></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────────
+const DAYS_OF_WEEK = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+const todayName = DAYS_OF_WEEK[new Date().getDay()];
+
+const schedule = [
+  { day:"Monday", theme:"💪 Push", u:"Chest & Shoulders", m:"Chest & Triceps + Skip" },
+  { day:"Tuesday", theme:"🦵 Lower", u:"Quads, Glutes, Hamstrings", m:"Glutes & Legs" },
+  { day:"Wednesday", theme:"🏃 Cardio+Core", u:"Row Intervals + Core", m:"Walk/Jog + Core Rehab" },
+  { day:"Thursday", theme:"🔙 Pull", u:"Back & Biceps", m:"Back & Biceps" },
+  { day:"Friday", theme:"🏋️ Full Body", u:"Hypertrophy", m:"Full Body + Skip finisher" },
+  { day:"Saturday", theme:"🚶 Recovery", u:"Walk/Run + Stretch", m:"Walk/Run + Stretch" },
+  { day:"Sunday", theme:"😴 Rest", u:"Full rest", m:"Full rest" },
+];
+
+const udayWorkout = [
+  { day:"Monday", label:"Push — Chest & Shoulders", exercises:[
+    {name:"Smith Machine Bench Press",sets:"4",reps:"8–10",note:"Primary lift — log weight every session"},
+    {name:"Smith Machine Incline Press",sets:"3",reps:"10–12",note:""},
+    {name:"Cable Chest Fly (high pulley)",sets:"3",reps:"12–15",note:"Full stretch"},
+    {name:"Smith Machine OHP",sets:"3",reps:"10",note:""},
+    {name:"Dumbbell Lateral Raise",sets:"4",reps:"15",note:"Strict — no swinging"},
+    {name:"Tricep Pushdown (cable)",sets:"3",reps:"12–15",note:""},
+  ]},
+  { day:"Tuesday", label:"Lower Body — Quads, Glutes, Hamstrings", exercises:[
+    {name:"Smith Machine Squat",sets:"4",reps:"8–10",note:"Feet slightly forward, hit parallel"},
+    {name:"Smith Machine Romanian Deadlift",sets:"3",reps:"10",note:"Hip hinge, soft knees"},
+    {name:"Kettlebell Goblet Squat",sets:"3",reps:"12",note:""},
+    {name:"Dumbbell Walking Lunge",sets:"3",reps:"10 each leg",note:""},
+    {name:"Smith Machine Calf Raise",sets:"4",reps:"20",note:""},
+    {name:"Cable Pallof Press",sets:"3",reps:"12 each side",note:"Anti-rotation core"},
+  ]},
+  { day:"Wednesday", label:"Cardio + Core", exercises:[
+    {name:"Concept2 Row — Intervals",sets:"6",reps:"250m hard / 90s rest",note:"Build to 8 rounds over 4 weeks"},
+    {name:"Outdoor Run / Walk",sets:"1",reps:"20–30 min",note:"Alternative if prefer outdoors"},
+    {name:"Dead Bug",sets:"3",reps:"12 each side",note:""},
+    {name:"Hanging Knee Raise",sets:"3",reps:"15",note:""},
+    {name:"Cable Pallof Press",sets:"3",reps:"12 each side",note:""},
+  ]},
+  { day:"Thursday", label:"Pull — Back & Biceps", exercises:[
+    {name:"Cable Lat Pulldown",sets:"4",reps:"10–12",note:"Full stretch at top"},
+    {name:"Seated Cable Row",sets:"4",reps:"10–12",note:"Elbows tight, full ROM"},
+    {name:"Smith Machine Bent-Over Row",sets:"3",reps:"10",note:"Hinge at hips"},
+    {name:"Face Pulls (cable)",sets:"3",reps:"15",note:"Rear delt + posture"},
+    {name:"Dumbbell Hammer Curl",sets:"3",reps:"12",note:""},
+    {name:"Cable Bicep Curl",sets:"3",reps:"12",note:""},
+  ]},
+  { day:"Friday", label:"Full Body Hypertrophy", exercises:[
+    {name:"Dumbbell Deadlift (from floor)",sets:"4",reps:"6–8",note:"PowerBlocks — Smith bar can't reach floor on Drone 2"},
+    {name:"Smith Machine Bench Press",sets:"3",reps:"12",note:"Lighter than Monday"},
+    {name:"Cable Lat Pulldown",sets:"3",reps:"12",note:""},
+    {name:"Kettlebell Swing",sets:"4",reps:"20",note:"Explosive hip drive"},
+    {name:"Dumbbell Shoulder Press",sets:"3",reps:"12",note:""},
+    {name:"Concept2 Row — Steady",sets:"1",reps:"12 min",note:""},
+  ]},
+  { day:"Saturday", label:"Active Recovery", exercises:[
+    {name:"Outdoor Walk / Easy Run",sets:"1",reps:"30 min",note:"Enjoy the free time"},
+    {name:"Full Body Stretch",sets:"1",reps:"20 min",note:""},
+    {name:"Foam Roll",sets:"1",reps:"10 min",note:""},
+  ]},
+];
+
+const manishaWorkout = [
+  { day:"Monday", label:"Push — Chest & Triceps + Skip", exercises:[
+    {name:"Jump Rope Warm-Up",sets:"1",reps:"3–5 min easy",note:"Stop if leaking, heaviness, or scar discomfort"},
+    {name:"Smith Machine Bench Press",sets:"3",reps:"10–12",note:"Start light — form first"},
+    {name:"Smith Machine Incline Press",sets:"3",reps:"12",note:""},
+    {name:"Cable Lateral Raise",sets:"3",reps:"15",note:""},
+    {name:"Tricep Pushdown (cable)",sets:"3",reps:"15",note:""},
+    {name:"Dead Bug",sets:"3",reps:"10 each side",note:"Floor — exhale on extension, no doming"},
+  ]},
+  { day:"Tuesday", label:"Lower Body — Glutes & Legs", exercises:[
+    {name:"Concept2 Easy Row Warm-Up",sets:"1",reps:"8 min",note:""},
+    {name:"Smith Machine Squat",sets:"3",reps:"12",note:"Bar only week 1"},
+    {name:"Smith Machine Romanian Deadlift",sets:"3",reps:"12",note:"Hip hinge"},
+    {name:"Kettlebell Goblet Squat",sets:"3",reps:"15",note:""},
+    {name:"Smith Machine Hip Thrust",sets:"3",reps:"15",note:"Bar across hips, drive through heels"},
+    {name:"Resistance Band Side Walk",sets:"3",reps:"15 each way",note:""},
+  ]},
+  { day:"Wednesday", label:"Cardio + Core Rehab", exercises:[
+    {name:"Outdoor Walk / Easy Jog",sets:"1",reps:"25–30 min",note:"Progress to jog weeks 5–6"},
+    {name:"Concept2 Easy Row",sets:"1",reps:"15 min",note:"Alternative if indoors"},
+    {name:"Dead Bug",sets:"3",reps:"10 each side",note:"Floor — fundamental TVA work"},
+    {name:"Bird Dog",sets:"3",reps:"12 each side",note:"Floor — hold 2 sec at top"},
+    {name:"Pallof Press (cable)",sets:"3",reps:"12 each side",note:"Best postpartum core"},
+    {name:"Dumbbell Suitcase Carry",sets:"3",reps:"30m each side",note:"One DB, anti-lateral flexion"},
+  ]},
+  { day:"Thursday", label:"Pull — Back & Biceps", exercises:[
+    {name:"Concept2 Easy Row Warm-Up",sets:"1",reps:"8 min",note:""},
+    {name:"Cable Lat Pulldown",sets:"3",reps:"12",note:"Full stretch at top"},
+    {name:"Seated Cable Row",sets:"3",reps:"12",note:"Squeeze shoulder blades"},
+    {name:"Dumbbell Single-Arm Row",sets:"3",reps:"12 each",note:""},
+    {name:"Face Pulls (cable)",sets:"3",reps:"15",note:"Essential for posture"},
+    {name:"Dumbbell Bicep Curl",sets:"3",reps:"12",note:""},
+  ]},
+  { day:"Friday", label:"Full Body + Skip Finisher", exercises:[
+    {name:"Smith Machine Deadlift",sets:"3",reps:"10",note:"Build weight gradually"},
+    {name:"Smith Machine Bench Press",sets:"3",reps:"12",note:""},
+    {name:"Seated Cable Row",sets:"3",reps:"12",note:""},
+    {name:"Kettlebell Swing",sets:"3",reps:"15",note:"Hip drive — best fat burner"},
+    {name:"Dumbbell Shoulder Press (seated)",sets:"3",reps:"12",note:""},
+    {name:"Jump Rope Finisher",sets:"3",reps:"1 min on / 30s rest",note:"Stop if any discomfort"},
+  ]},
+  { day:"Saturday", label:"Active Recovery", exercises:[
+    {name:"Outdoor Walk / Easy Run",sets:"1",reps:"30 min",note:""},
+    {name:"Full Body Stretch",sets:"1",reps:"15 min",note:""},
+  ]},
+];
+
+const postpartumCircuit = [
+  {name:"Diaphragmatic Breathing",reps:"10 breaths",note:"Belly rises on inhale, ribcage narrows on exhale"},
+  {name:"TVA Activation",reps:"10 × 5 sec hold",note:"Standing — gently pull navel in"},
+  {name:"Dead Bug",reps:"8 each side",note:"Floor — slow, exhale on extension"},
+  {name:"Bird Dog",reps:"8 each side",note:"Floor — hold 2 sec at top"},
+  {name:"Dumbbell Suitcase Carry",reps:"2 × 30m each side",note:"One DB, tall posture, brace core"},
+];
+
+const udayMeals = [
+  {time:"5:45 AM",meal:"Pre-Workout",food:"120g banana + black coffee (no sugar)",protein:1,carbs:27,fat:0,kcal:110,subs:"2 dates + coffee | Just coffee if stomach sensitive",note:"No cooking. 15 min before gym."},
+  {time:"7:15 AM",meal:"Breakfast",food:"2 whole eggs + 2 egg whites omelette (onion/tomato/capsicum) + 2 slices whole wheat toast + 5g ghee",protein:38,carbs:32,fat:21,kcal:477,subs:"4 boiled eggs + toast | Egg bhurji + toast | Bread → 170g cooked dosa/idli",note:"Most important meal."},
+  {time:"10:30 AM",meal:"Mid-Morning",food:"150g Greek yogurt (zero fat) + 150g fruit",protein:15,carbs:35,fat:0,kcal:210,subs:"1 scoop whey in water + fruit | PB 25g on toast",note:"Zero prep."},
+  {time:"1:00 PM",meal:"Lunch",food:"200g cooked rice + 150g cooked chicken + 100g cooked sabzi + 150g curd + 7g ghee",protein:42,carbs:65,fat:16,kcal:574,subs:"Rice → 2 chapati (80g) | Chicken → 100g paneer",note:"Batch cook Sunday. Reheat 5 min."},
+  {time:"4:00 PM",meal:"Evening Snack",food:"1 scoop whey (25g) in 300ml water or milk + 150g fruit + 6 almonds",protein:27,carbs:42,fat:4,kcal:311,subs:"2 boiled eggs + banana | Greek yogurt 150g + fruit",note:"Zero cooking. Done in 2 min."},
+  {time:"7:30 PM",meal:"Dinner",food:"160g cooked rice + 150g cooked chicken + 150g cooked green veggies + 7g ghee",protein:40,carbs:52,fat:15,kcal:499,subs:"Rice → 2 chapati (80g) | Prefer chapati or smaller rice — not strict",note:"Finish 2 hrs before sleep."},
+];
+
+const manishaMeals = [
+  {time:"5:45 AM",meal:"Pre-Workout",food:"100g banana or skip — near-fasted fine for fat loss",protein:1,carbs:23,fat:0,kcal:90,subs:"Black coffee only | Skip entirely",note:"Optional."},
+  {time:"7:15 AM",meal:"Breakfast",food:"2 whole eggs + 1 egg white omelette (veggies) + 1 slice whole wheat toast + 5g ghee",protein:24,carbs:20,fat:13,kcal:297,subs:"30g ragi cooked + 200ml milk + 1 boiled egg | 1 idli + sambar + 2 boiled eggs",note:"Protein first, every morning."},
+  {time:"10:30 AM",meal:"Mid-Morning",food:"120g Greek yogurt (zero fat) + 100g fruit",protein:12,carbs:22,fat:0,kcal:136,subs:"200ml buttermilk + fruit if prefer lighter",note:"Greek yogurt preferred."},
+  {time:"1:00 PM",meal:"Lunch",food:"120g cooked rice + 100g cooked chicken + 100g cooked dal + 100g cooked sabzi + 100g curd + 5g ghee",protein:32,carbs:48,fat:12,kcal:428,subs:"Rice → 1.5 chapati (60g) | Chicken → 50g soya OR 80g paneer",note:"No second servings."},
+  {time:"4:00 PM",meal:"Evening Snack",food:"1 scoop whey (20g) in water + 120g banana + 15 almonds + 1 tsp peanut butter",protein:22,carbs:33,fat:11,kcal:324,subs:"Greek yogurt (120g) + banana + almonds | 2 boiled eggs + banana",note:"Main protein window. Don't skip."},
+  {time:"7:30 PM",meal:"Dinner",food:"1.5 cooked chapati (60g) + 100g cooked chicken + 150g cooked green veggies + 100g curd + 5g ghee",protein:30,carbs:38,fat:15,kcal:407,subs:"No chicken: 150g rajma + 1 egg | Prefer chapati at dinner",note:"Finish 2 hrs before sleep."},
+];
+
+const udayTotals = {protein:165,carbs:271,fat:59,kcal:2289};
+const manishaTotals = {protein:121,carbs:184,fat:51,kcal:1682};
+
+const fridaySubs = {
+  uday:"Replace chicken with: 100g cooked paneer curry OR 150g cooked rajma/chole OR 2 whole eggs + 2 whites + 50g soya.",
+  manisha:"Replace chicken with: 80g cooked paneer bhurji OR 2 moong dal chilla OR 130g cooked tofu sabzi.",
+};
+
+const udayRules = [
+  "Weigh daily — morning, post-bathroom, pre-food. Track 7-day average.",
+  "All quantities are COOKED weights — measure after cooking",
+  "Creatine 5g daily — mix in water, no loading phase",
+  "No sugar, no fruit juice. Black coffee / green tea fine.",
+  "If hungry between meals — cucumber, tomato, lemon water",
+  "Prefer chapati or smaller rice at dinner — not a strict rule",
+  "Finish dinner 2 hrs before sleep",
+];
+const manishaRules = [
+  "Weekly weigh-in ONLY — Friday morning. No daily weighing postpartum.",
+  "Track waist at navel every 2 weeks — more reliable than scale",
+  "10-min morning circuit before breakfast — every single day",
+  "Creatine 5g daily — helps muscle retention during fat loss",
+  "Prefer chapati or smaller rice at dinner — not a strict rule",
+  "No sugar, no fried snacks, no fruit juice",
+  "Finish dinner 2 hrs before sleep",
+];
+
+const progressionPhases = [
+  {phase:"Phase 1",weeks:"Weeks 1–2",label:"Learn the Movements",color:"#5b9bd5",
+    uday:"60% of max. Perfect form on every rep. Log baseline weights. Creatine 5g starts.",
+    manisha:"Bar only on Smith. Jump rope 3–5 min easy Mon only. Daily postpartum circuit.",
+    focus:["Establish baseline weights","Start food logging","Progress photos Week 1"]},
+  {phase:"Phase 2",weeks:"Weeks 3–4",label:"Build the Load",color:"#4caf7d",
+    uday:"Add 2.5–5kg on main lifts. 2–3 reps in reserve. Add 1 Concept2 interval per week.",
+    manisha:"Add light plates. Jump rope Mon + Fri. Increase Pallof press load.",
+    focus:["Increase weight each session","Add 1 row interval weekly","Friday weigh-in (Manisha)"]},
+  {phase:"Phase 3",weeks:"Weeks 5–6",label:"Push Close to Failure",color:"#f5a623",
+    uday:"Last set = 1 rep in reserve. Tightest diet week. Push Concept2 pace.",
+    manisha:"Real load on squat and deadlift. Jump rope up to 3×2 min. Add seated OHP.",
+    focus:["Waist measurement","Progress photos Week 4","Note strength gains"]},
+  {phase:"Phase 4",weeks:"Weeks 7–8",label:"Peak + Deload",color:"#a78bfa",
+    uday:"Week 7: highest effort. Week 8: deload — 50% weight, same movements.",
+    manisha:"Week 7: best effort. Week 8: half volume. Compare Week 1 vs 8.",
+    focus:["Week 1 vs 8 comparison","Progress photos Week 8","Plan next cycle"]},
+];
+
+const wellnessData = [
+  {section:"💊 Collagen Peptides", color:"#f5a623", items:[
+    {name:"Uday — 10g daily",who:"Uday",dose:"Mix in coffee",note:"Joint health for heavy lifts. Skin elasticity as you recomp. Take with Vitamin C."},
+    {name:"Manisha — 15g daily",who:"Manisha",dose:"Mix in coffee/warm water",note:"Postpartum skin repair, C-section scar healing, connective tissue. Most important supplement for her."},
+  ]},
+  {section:"🌿 Fenugreek (Methi)", color:"#4caf7d", items:[
+    {name:"Uday — 500mg extract or soaked seeds",who:"Uday",dose:"Morning",note:"Supports testosterone, blood sugar regulation, reduces belly fat. Directly supports recomp."},
+    {name:"Manisha — soaked seeds morning",who:"Manisha",dose:"1 tsp soaked overnight",note:"Hormone rebalancing, insulin sensitivity for fat loss, hair strengthening, anti-inflammatory for scar healing."},
+    {name:"Food form (best)",who:"Both",dose:"Daily cooking",note:"Methi in tadka/sambar/rasam. Already in traditional cooking — maximize it."},
+  ]},
+  {section:"💇 Hair Health", color:"#5b9bd5", items:[
+    {name:"Ferritin test — URGENT",who:"Manisha",dose:"Ask OB specifically",note:"#1 missed cause of postpartum hair loss. Test ferritin (not just haemoglobin). If below 70 ng/mL, supplement iron bisglycinate."},
+    {name:"Biotin 5000mcg",who:"Both",dose:"Daily",note:"Supports keratin — hair, skin, nails. Already in eggs but supplement additionally."},
+    {name:"Zinc 25–30mg",who:"Both",dose:"With food",note:"Hair follicle repair. Don't exceed 40mg. Take with food or causes nausea."},
+    {name:"Omega-3 Fish Oil 2g EPA+DHA",who:"Both",dose:"With meal",note:"Reduces scalp inflammation, hair density. Uday: muscle support. Manisha: postpartum mood + hormone."},
+    {name:"Rosemary Oil scalp massage",who:"Both",dose:"2–3x/week",note:"Matches minoxidil for regrowth at 6 months. Dilute 5–6 drops in 1 tbsp coconut oil. 1 hr before wash."},
+  ]},
+  {section:"🧴 Skin Health", color:"#a78bfa", items:[
+    {name:"Vitamin C serum (topical)",who:"Both",dose:"Morning",note:"L-ascorbic acid 10–15%. Brightens, collagen synthesis, UV protection. Most impactful single skin addition."},
+    {name:"SPF 30+ daily",who:"Both",dose:"15 min before going out",note:"Texas sun is serious. Non-negotiable for South Asian skin — prone to hyperpigmentation."},
+    {name:"Hyaluronic Acid serum",who:"Manisha",dose:"On damp skin, before moisturiser",note:"Postpartum skin is dehydrated from hormones. Pulls moisture in. Affordable at H-E-B / Amazon."},
+    {name:"Turmeric in cooking",who:"Both",dose:"Maximize daily",note:"Anti-inflammatory, skin clarity, even tone. Internal turmeric noticeably improves glow over 6–8 weeks."},
+  ]},
+  {section:"🌙 Sleep & Hormones", color:"#4caf7d", items:[
+    {name:"Ashwagandha KSM-66 300–600mg",who:"Both",dose:"At night",note:"Reduces cortisol, improves sleep + testosterone. Manisha: postpartum hormone rebalancing. Most impactful adaptogen."},
+    {name:"Magnesium Glycinate 300–400mg",who:"Both",dose:"At night",note:"Improves deep sleep quality. Most people are deficient. Better sleep = better hormones = better body composition."},
+    {name:"Vitamin D3 2000–4000 IU + K2 100mcg",who:"Both",dose:"With meal",note:"Critical for testosterone (Uday), estrogen rebalancing (Manisha), skin, mood. Get tested first — very common to be deficient in DFW."},
+  ]},
+];
+
+const tips = [
+  {icon:"🎯",color:"#f5a623",title:"Uday — Recomp, Not Bulk",body:"At 75kg/6ft with belly fat present, lean bulk increases that fat first. Recomp is smarter: ~2150 kcal, train hard, body simultaneously loses fat and gains muscle. You'll look better faster."},
+  {icon:"🤝",color:"#4caf7d",title:"2 Free Months — Golden Window",body:"No twins = better sleep, time to cook, uninterrupted 6 AM. This is the setup most people never get. Hit every session and both of you will look noticeably different when they return."},
+  {icon:"🏃",color:"#5b9bd5",title:"Outdoor Run / Walk",body:"Wednesday and Saturday outdoors. Consider a 5K run Saturday — great conditioning. Nike Run Club is free. Texas 6 AM mornings are perfect for this."},
+  {icon:"💊",color:"#a78bfa",title:"Supplements — Evidence Based Only",body:"Creatine 5g daily both — no loading. Whey if hitting protein targets is hard. Vitamin D if deficient. That's the complete list."},
+  {icon:"🍱",color:"#f5a623",title:"Sunday Meal Prep",body:"Cook 2–3kg chicken. Boil 8–10 eggs. Pressure cook dal + rajma. Batch rice. Cuts daily cooking to 10 min. Indian food freezes well — make double batches."},
+  {icon:"😴",color:"#5b9bd5",title:"Sleep 8 Hours",body:"Without twins interrupting, aim for 8 hours consistently. GH peaks during deep sleep — this is when muscle is built and fat is mobilised. Don't waste this advantage."},
+];
+
+// ── RENDER FUNCTIONS ──────────────────────────────────────────────────────────
+function renderSchedule() {
+  const el = document.getElementById('schedule-rows');
+  el.innerHTML = schedule.map(d => `
+    <div class="sched-row">
+      <div class="sched-day">
+        <div class="sched-day-name">${d.day}</div>
+        <div class="sched-theme">${d.theme}</div>
+      </div>
+      <div>
+        <div class="sched-u">🏋️ ${d.u}</div>
+        <div class="sched-m">💪 ${d.m}</div>
+      </div>
+    </div>`).join('');
+}
+
+function renderWorkoutDays(workoutData, containerId) {
+  const el = document.getElementById(containerId);
+  el.innerHTML = '';
+  workoutData.forEach(day => {
+    const isToday = day.day === todayName;
+    const div = document.createElement('div');
+    div.className = 'workout-day' + (isToday ? ' today' : '');
+    if(isToday) div.style.background = 'linear-gradient(135deg,#1f1c2e,#252235)';
+    div.innerHTML = `
+      <div class="workout-day-header" onclick="toggleWorkoutDay(this)">
+        <div class="workout-day-left">
+          <span class="workout-day-name">${day.day}</span>
+          <span class="workout-day-label">${day.label}</span>
+          ${isToday ? '<span class="today-badge">TODAY</span>' : ''}
+        </div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="workout-day-body${isToday ? ' open' : ''}">
+        <div class="ex-header"><span>Exercise</span><span>Sets</span><span>Reps</span></div>
+        ${day.exercises.map(ex => `
+          <div class="ex-row">
+            <div><div class="ex-name">${ex.name}</div>${ex.note ? `<div class="ex-note">${ex.note}</div>` : ''}</div>
+            <div class="ex-sets">${ex.sets}</div>
+            <div class="ex-reps">${ex.reps}</div>
+          </div>`).join('')}
+      </div>`;
+    el.appendChild(div);
+  });
+}
+
+function toggleWorkoutDay(header) {
+  const body = header.nextElementSibling;
+  const chev = header.querySelector('.chevron');
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  chev.textContent = isOpen ? '▼' : '▲';
+}
+
+function renderPostpartumCircuit() {
+  document.getElementById('postpartum-circuit').innerHTML = postpartumCircuit.map(ex => `
+    <div class="circuit-row">
+      <div><div class="circuit-name">${ex.name}</div><div class="circuit-note">${ex.note}</div></div>
+      <div class="circuit-reps">${ex.reps}</div>
+    </div>`).join('');
+}
+
+let currentDiet = 'uday';
+function switchDiet(person) {
+  currentDiet = person;
+  document.getElementById('diet-uday-btn').classList.toggle('active', person === 'uday');
+  document.getElementById('diet-uday-btn').style.color = person === 'uday' ? 'var(--accent)' : 'var(--muted)';
+  document.getElementById('diet-manisha-btn').classList.toggle('active', person === 'manisha');
+  document.getElementById('diet-manisha-btn').style.color = person === 'manisha' ? 'var(--blue)' : 'var(--muted)';
+  renderDiet(person);
+}
+
+function renderDiet(person) {
+  const meals = person === 'uday' ? udayMeals : manishaMeals;
+  const totals = person === 'uday' ? udayTotals : manishaTotals;
+  const color = person === 'uday' ? 'var(--accent)' : 'var(--blue)';
+  const rules = person === 'uday' ? udayRules : manishaRules;
+
+  document.getElementById('diet-info-text').textContent = person === 'uday'
+    ? 'All quantities in COOKED weight. Tap row to expand. Ghee 5–7g per meal included. Water: 3–3.5L/day.'
+    : 'All quantities in COOKED weight. Tap row to expand. Weekly weigh-in only (Friday). Water: 2.5–3L/day.';
+
+  document.getElementById('diet-rows').innerHTML = meals.map((m, i) => `
+    <div class="diet-row" onclick="toggleDietRow(${i})">
+      <div class="diet-row-top">
+        <div class="diet-time">${m.time}</div>
+        <div><div class="diet-meal-name">${m.meal}</div><div class="diet-meal-preview">${m.food.split('+')[0].trim()}</div></div>
+        <div class="diet-p">${m.protein}</div>
+        <div class="diet-c">${m.carbs}</div>
+        <div class="diet-f">${m.fat}</div>
+        <div class="diet-k" style="color:${color}">${m.kcal}</div>
+      </div>
+      <div class="diet-row-body" id="diet-row-${i}">
+        <div class="diet-food">${m.food}</div>
+        ${m.subs ? `<div class="diet-subs"><span class="diet-subs-label">SUBS: </span>${m.subs}</div>` : ''}
+        ${m.note ? `<div class="diet-note-text">${m.note}</div>` : ''}
+      </div>
+    </div>`).join('');
+
+  document.getElementById('diet-totals').innerHTML = `
+    <div class="diet-totals-label">DAILY TOTAL</div>
+    <div style="color:var(--green);font-size:12px;font-weight:800;text-align:center">${totals.protein}</div>
+    <div style="color:var(--blue);font-size:12px;font-weight:800;text-align:center">${totals.carbs}</div>
+    <div style="color:var(--red);font-size:12px;font-weight:800;text-align:center">${totals.fat}</div>
+    <div style="color:${color};font-size:12px;font-weight:800;text-align:center">${totals.kcal}</div>`;
+
+  document.getElementById('friday-text').textContent = fridaySubs[person];
+
+  document.getElementById('diet-rules').innerHTML = rules.map((r, i) => `
+    <div class="rule-row"><span class="rule-num">${i+1}.</span><span class="rule-text">${r}</span></div>`).join('');
+}
+
+function toggleDietRow(i) {
+  const body = document.getElementById(`diet-row-${i}`);
+  body.classList.toggle('open');
+}
+
+function renderProgression() {
+  document.getElementById('progression-phases').innerHTML = progressionPhases.map(p => `
+    <div class="phase-card card" style="border-color:${p.color}44;margin-bottom:10px;background:linear-gradient(145deg,#252235,#1e1b28);">
+      <div class="phase-header">
+        <span class="phase-badge" style="background:${p.color}22;color:${p.color}">${p.phase}</span>
+        <span class="phase-weeks">${p.weeks}</span>
+        <span class="phase-label" style="color:${p.color}">${p.label}</span>
+      </div>
+      <div class="grid2">
+        <div style="background:var(--surface);border-radius:8px;padding:10px">
+          <div style="color:var(--accent);font-size:11px;font-weight:700;margin-bottom:4px">🏋️ Uday</div>
+          <div style="color:var(--text);font-size:11px;line-height:1.55">${p.uday}</div>
+        </div>
+        <div style="background:var(--surface);border-radius:8px;padding:10px">
+          <div style="color:var(--blue);font-size:11px;font-weight:700;margin-bottom:4px">💪 Manisha</div>
+          <div style="color:var(--text);font-size:11px;line-height:1.55">${p.manisha}</div>
+        </div>
+      </div>
+      <div class="phase-focus">
+        ${p.focus.map(f => `<span class="focus-chip" style="background:${p.color}18;color:${p.color}">${f}</span>`).join('')}
+      </div>
+    </div>`).join('');
+}
+
+function renderTracking() {
+  const saved = JSON.parse(localStorage.getItem('tracking') || '[]');
+  document.getElementById('tracking-rows').innerHTML = Array.from({length:8},(_,i) => {
+    const w = saved[i] || {udayWeight:'',manishaWeight:'',waist:'',workouts:''};
+    return `<div class="track-row">
+      <div class="track-wk">Wk ${i+1}</div>
+      <input class="track-input" value="${w.udayWeight}" placeholder="—" onchange="saveTracking(${i},'udayWeight',this.value)">
+      <input class="track-input" value="${w.manishaWeight}" placeholder="—" onchange="saveTracking(${i},'manishaWeight',this.value)">
+      <input class="track-input" value="${w.waist}" placeholder="—" onchange="saveTracking(${i},'waist',this.value)">
+      <input class="track-input" value="${w.workouts}" placeholder="—" onchange="saveTracking(${i},'workouts',this.value)">
+    </div>`;
+  }).join('');
+}
+
+function saveTracking(week, field, value) {
+  const saved = JSON.parse(localStorage.getItem('tracking') || '[]');
+  if (!saved[week]) saved[week] = {};
+  saved[week][field] = value;
+  localStorage.setItem('tracking', JSON.stringify(saved));
+}
+
+function renderWellness() {
+  document.getElementById('wellness-content').innerHTML = wellnessData.map(section => `
+    <div class="card" style="border-color:${section.color}44;margin-bottom:10px">
+      <p style="font-weight:700;font-size:13px;color:${section.color};margin-bottom:10px">${section.section}</p>
+      ${section.items.map(item => `
+        <div class="well-item">
+          <div class="well-item-header">
+            <span class="well-item-name">${item.name}</span>
+            <div class="well-item-tags">
+              <span class="well-tag" style="background:${section.color}18;color:${section.color}">${item.who}</span>
+              <span class="well-tag" style="background:var(--surface);color:var(--muted)">${item.dose}</span>
+            </div>
+          </div>
+          <div class="well-item-note">${item.note}</div>
+        </div>`).join('')}
+    </div>`).join('') + `
+    <div class="card" style="border-color:var(--border)">
+      <p style="font-weight:700;font-size:13px;color:var(--accent);margin-bottom:10px">📋 Priority Stack</p>
+      <div class="grid2">
+        <div style="background:var(--surface);border-radius:8px;padding:10px">
+          <div style="color:var(--accent);font-weight:700;font-size:12px;margin-bottom:8px">Uday</div>
+          ${["Creatine 5g — Day 1","Collagen 10g in coffee","Fenugreek 500mg morning","Omega-3 2g with meal","Ashwagandha 300mg night","Vitamin D3 + K2","Biotin 5000mcg"].map((x,i) => `<div class="stack-item"><span class="stack-num" style="color:var(--accent)">${i+1}.</span><span class="stack-text">${x}</span></div>`).join('')}
+        </div>
+        <div style="background:var(--surface);border-radius:8px;padding:10px">
+          <div style="color:var(--blue);font-weight:700;font-size:12px;margin-bottom:8px">Manisha</div>
+          ${["Collagen 15g — priority #1","Ferritin test ASAP (OB)","Fenugreek soaked seeds","Omega-3 2g — mood + hair","Ashwagandha 300mg night","Zinc 25mg with lunch","Rosemary oil 3x/week"].map((x,i) => `<div class="stack-item"><span class="stack-num" style="color:var(--blue)">${i+1}.</span><span class="stack-text">${x}</span></div>`).join('')}
+        </div>
+      </div>
+      <p style="font-size:11px;color:var(--muted);font-style:italic;margin-top:10px">Add 1–2 per week. Consult doctor before starting, especially Manisha postpartum.</p>
+    </div>`;
+}
+
+function renderTips() {
+  document.getElementById('tips-content').innerHTML = tips.map(t => `
+    <div class="tip-card" style="border-color:${t.color}44">
+      <div class="tip-icon">${t.icon}</div>
+      <div>
+        <div class="tip-title" style="color:${t.color}">${t.title}</div>
+        <div class="tip-body">${t.body}</div>
+      </div>
+    </div>`).join('');
+}
+
+// ── TAB SWITCHING ─────────────────────────────────────────────────────────────
+const tabIds = ['overview','uday','manisha','diet','progression','tracking','wellness','tips'];
+function showTab(name, btn) {
+  tabIds.forEach(id => {
+    document.getElementById('tab-' + id).style.display = id === name ? '' : 'none';
+  });
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  localStorage.setItem('activeTab', name);
+  // Scroll tabs to show active button
+  if (btn) btn.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
+}
+
+// ── PWA INSTALL ───────────────────────────────────────────────────────────────
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('install-banner').style.display = 'block';
+});
+document.getElementById('install-btn').addEventListener('click', async () => {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    const result = await deferredPrompt.userChoice;
+    deferredPrompt = null;
+    document.getElementById('install-banner').style.display = 'none';
+  }
+});
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+renderSchedule();
+renderWorkoutDays(udayWorkout, 'uday-workout-days');
+renderWorkoutDays(manishaWorkout, 'manisha-workout-days');
+renderPostpartumCircuit();
+renderDiet('uday');
+renderProgression();
+renderTracking();
+renderWellness();
+renderTips();
+
+// Restore last tab
+const savedTab = localStorage.getItem('activeTab');
+if (savedTab && tabIds.includes(savedTab)) {
+  const btn = document.querySelector(`.tab-btn[onclick="showTab('${savedTab}',this)"]`);
+  showTab(savedTab, btn);
+}
+</script>
+</body>
+</html>
